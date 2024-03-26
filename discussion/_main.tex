@@ -1,0 +1,78 @@
+\section{Discussion}
+\stodor{Combines \textbf{Discussion} + \textbf{Potential implications} sections; \url{https://academic.oup.com/gigascience//pages/research}}
+To facilitate reuse of computational research, there is an urgent need for a common, machine-accessible format for sharing the results of computational analyses. CWLProv \cite{khanSharingInteroperableWorkflow2019} is an RO specification that encapsulates both data and provenance metadata associated with workflow executions.
+However, the wide choice in metadata standards and ontologies can make it difficult for practitioners and developers to \emph{prioritize} a set of useful metadata that should be collected during workflow execution.
+Here we describe an approach to define such a set of metadata by focusing on relevant provenance questions grounded in a limited set of use cases for one exemplary workflow, instead of a high-level analysis of many workflows in a particular discipline. 
+% Here we address this problem by defining provenance metadata that is required to answer a set of provenance questions grounded in five realistic use case scenarios for one exemplary bioinformatics workflow. 
+% However, because requirements for provenance vary between communities and purposes for which the provenance is used, it is intimidating for both practitioners as well as (CWLProv) developers to prioritize which metadata should be collected.
+% Here we address this problem by defining \emph{workflow-specific} requirements, while following a \emph{generalizable} approach. 
+
+We summarize this metadata into a \emph{provenance taxonomy} and perform a systematic analysis of the CWLProv community standard, distinguishing between three different levels of representation. From this analysis, we identify three areas of improvement for CWLProv: to describe the computational environment on which the workflow is executed, propagate annotations in the workflow and input parameter file to the RDF provenance record, and provide CWL practitioners with detailed guidelines for the annotation of their input data. To improve CWLProv, we propose two extensions. Firstly, we reuse the Bioschemas \cite{michelBioschemasSchemaOrg2018} \emph{Dataset} profile to design a scheme for the annotation of input data. Secondly, we extend the RDF provenance graph to include all workflow components for which CWL-specific metadata fields have been defined (Table \ref{tab:metadata_fields}), which is compatible with the proposed annotation scheme. 
+
+% At the individual workflow level: Audience = workflow authors, FAIR enthusiasts
+The approach described here makes adding provenance to workflows \emph{actionable}. In the first place, creating a list of practitioner-centered provenance questions helps communities prioritize the provenance metadata they should share with their data. Importantly, we do not intend to define a new metadata standard, but rather help communities apply existing standards, selecting those that are most relevant for the purposes for which provenance is used in their domain. 
+% \todorenske{Related work:
+
+% - ISA framework \cite{sansoneInteroperableBioscienceData2012}: high-level for all of life sciences, does not go into detail about the workflow (not sure if this is the correct citation)
+
+% - FAIRSharing.org \cite{thefairsharingcommunityFAIRsharingCommunityApproach2019}: has the standards that communities should choose from
+
+% - FAIR implementation profiles \cite{schultesReusableFAIRImplementation2020}: most similar to this work, but covers \emph{all} FAIR resources, not just metadata standards.
+
+% }
+
+%\stodor{Related work: FAIR Implementation Profiles \cite{schultesReusableFAIRImplementation2020} + FAIRSharing.org + ISA} %Given that provenance requirements are likely to be similar within communities, existing taxonomies for related workflows can be used as a starting point. In time, communities can also standardize taxonomy creation by defining a list of use cases and associated provenance questions. %This last point identifies a need for a common, easily browseable inventory to keep track of these taxonomies and promote convergence of provenance standards across and within communities.
+% \todorenske{Our work is different from related efforts, such as.... FAIR data station? \cite{nijsseFAIRDataStation2022}, GO-FAIR initiative? ISA framework? JERM ontology? Minimum information models? These solve part of the problem but not the entire situation.}
+% \todorenske{@Michael: we could adapt the concept of FAIR implementation profiles \cite{schultesReusableFAIRImplementation2020} to store provenance taxonomies. People from the VU are working on this (and I have presented in their group meeting), could be a very interesting collaboration! \url{https://www.go-fair.org/how-to-go-fair/fair-implementation-profile/}}
+
+% At the level of RO specifications: Audience = provenance experts
+In addition, 
+%to identifying useful metadata for a given scientific community, 
+our approach is also highly informative for the development and improvement of RO specifications. We demonstrated this by designing two extensions to CWLProv to address the gaps we identified in our systematic analysis of the specification. Moreover, our taxonomy was also used in the design of the CWLProv successor, the Workflow Run RO-Crate profile\footnote{\url{https://www.researchobject.org/workflow-run-crate/}}, as part of the RO-Crate project \cite{soiland-reyesPackagingResearchArtefacts2022}.
+
+% Annotation scheme. Audience = workflow authors, FAIR enthusiasts.
+The first of our extensions is an annotation scheme for input data. In the current version of CWLProv and its implementation in \emph{cwltool} \cite{crusoeCommonworkflowlanguageCwltool202305131557342023}, provenance of input data is only captured as structured annotations in the input parameter file. To promote consistency, we propose detailed guidelines for the annotation of single inputs as well as complete workflow runs, which are lacking in the current CWL Standards (v1.2)\footnote{\url{https://www.commonwl.org/v1.2/}} \cite{crusoeMethodsIncludedStandardizing2022}  \stodor{Is there a DOI for CWL standards v1.2?}. To optimize the tradeoff between domain-neutrality and expressiveness, the core of our scheme is based on Schema.org \cite{guhaBigDataMakes2015}, but we support the use of additional ontologies for domain-specific concepts. If necessary, individual communities can define specializations to our scheme that more specifically address their provenance needs.
+
+% Automate the collection of provenance. Audience = CWL/WMS developers, database developers
+Although the annotation scheme \emph{conceptually} provides practitioners with a means to add metadata to their data, our ultimate goal is to capture workflow execution provenance automatically (Fig. \ref{fig:vision}). Firstly, many useful metadata is probably already accessible to workflow systems, especially if data retrieval is part of workflow execution. In addition, it is possible to lower the barrier for manual annotation (e.g. to capture the \emph{why} of the analysis, T1) by providing prompts in the workflow system interface, subsequently converting them to semantic annotations. To promote interoperability, future work should focus on defining a common, machine-accessible format in which databases can supply their data and metadata. We believe that an RO specification (possibly an RO-Crate profile) could be a suitable candidate for this purpose. 
+
+Finally, further research should focus on the development of tools which facilitate provenance analysis, for example through standardized queries (the provenance questions and taxonomy can act here as a guideline), which would remove the need for scientists to learn SPARQL before they can analyze the RO. 
+
+% RDF extension: Audience = provenance experts, developers
+Finally, our extension of the RDF provenance graph enables more comprehensive querying with SPARQL \cite{thew3csparqlworkinggroupSPARQLOverview2013}. Nevertheless, computational environment (T5), an important factor in workflow executions, is still insufficiently represented for the use cases we considered here. This was predominantly caused by the lack of a suitable standard for the representation of this metadata. Future work should focus on the development of such a standard, preferably in a working group including a wide array of stakeholders, in order to be broadly adopted. 
+
+In conclusion, the complexity of present-day computational analyses necessitates the development of automatic provenance tracking solutions. The results of this work can guide the development of these solutions, since they help prioritize which metadata is most useful, based on the purposes which are relevant from a bioinformatics practioner's perspective.
+
+% \todorenske{@Michael: Iacopo Colonelli is interested in a collaboration to standardize the description of computational environment.}
+
+% Finally, further research should focus on the development of tools which facilitate provenance analysis, for example through standardized queries (the provenance questions and taxonomy can act here as a guideline), which would remove the need for scientists to learn SPARQL before they can analyze the RO. 
+
+
+% Another direction of future research is to define how much of the metadata from upstream analyses should be included in the provenance. Here an integration with the distributed provenance model can be of great assistance. 
+
+
+% \todorenske{Below: additional points}
+
+% In addition, workflow registries (WorkflowHub) can use the taxonomy to provide standardized queries.
+
+% Based on the results of the CWLProv analysis, we found that many annotations were not automatically collected and heavily reliant on manual annotations, yet the current CWL Standards (v1.2) give authors no specific guidelines to do this. This welcomes inconsistency and hinders standardized querying of the data.
+
+% It was a challenge to ensure domain-neutrality on the one hand, while still offering enough flexibility to accommodate domain-specific metadata on the other. We solved this by using Schema.org for terms that are generic, while permitting the use of terms from other vocabularies which facilitate expressing richer metadata which are relevant to that discipline.
+
+
+
+% \textbf{}
+
+% There are no schema.org terms for computational environment etc. Need to be developed (or in a separate ontology)
+
+
+% \textbf{Potential impact}
+
+% Taxonomy can be used to analyze other RO specifications.
+
+% Can be extended with other workflow templates / use cases --> represents a way of thinking.
+
+% Can inform RO repositories (WorkflowHub?) to provide automatic queries into the data, example questions.
+
+% WMSs can promote annotating input data/steps by prompting questions (why?) or suggesting EDAM terms for intent, etc. Can be integrated with software/workflow repositories.
+

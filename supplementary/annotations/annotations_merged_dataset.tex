@@ -1,0 +1,15 @@
+\begin{minted}[linenos,xleftmargin=\parindent,breaklines]{yaml}
+cwlprov:prov:
+  merge_action:
+    s:additionalType: s:Action
+    s:object:
+    - dataset1
+    - dataset2
+    s:instrument: pd.merge(dataset1, dataset2, on = "ID", how = "inner")
+    s:result: merged_dataset
+    s:description: "Imported both datasets as pandas dataframes, performed inner merge and saved as csv."
+
+merged_dataset:
+  class: File
+  location: path://path/to/file.csv
+\end{minted}

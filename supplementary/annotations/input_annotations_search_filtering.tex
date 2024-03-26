@@ -1,0 +1,21 @@
+\begin{minted}[linenos,xleftmargin=\parindent,breaklines]{yaml}
+cwlprov:prov:
+  pdb_search:
+    s:additionalType: s:SearchAction
+    s:query: "All proteins with at least 2 chains deposited between 2010 and 2022"
+    s:object:
+      s:identifier: https://bio.tools/pdb
+    s:result: pdb_search_result
+    s:endTime: 2022-08-01
+      
+  filtering_action:
+    s:additionalType: s:Action
+    s:object: pdb_search_result
+    s:instrument: 
+      s:identifier: https://bio.tools/pisces
+    s:result: filtered_pdb_dataset
+
+filtered_pdb_dataset:
+  class: Directory
+  location: path://path/to/directory/
+\end{minted}

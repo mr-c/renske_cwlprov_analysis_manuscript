@@ -1,0 +1,44 @@
+\begin{table*}
+\caption{Overview of provenance taxonomy, with the provenance questions (\emph{PQs}) that apply to each of the categories. In addition, the components of the taxonomy are integrated with already accepted principles and guidelines (\emph{Source}).
+%\todorenske{What should go in Refs? Only officially defined standards like FAIR principles/data citation principles or also random publications which mention that including something may be necessary?}
+}\label{tab:taxonomy}
+% Use "S" column identifier (from siunitx) to align on decimal point.
+% Use "L", "R" or "C" column identifier for auto-wrapping columns with tabularx.
+
+\begin{tabularx}{\linewidth}{p{0.1in}p{0.3in}p{1.3in}Lp{0.45in}p{0.3in}} %{l{0.05\textwidth} l{0.3\textwidth} l{0.5\textwidth} L{0.05\textwidth} l{0.05\textwidth} l{0.05\textwidth}}
+\toprule
+{Type} & {Subtype} & {Name} & {Metadata}  & {PQs} & {Source} \\
+\midrule
+T1  & {SC1}\label{tax:sc1}   & Workflow design  & Annotations on the design of the workflow and its components. Purpose of the workflow, why steps were included or excluded, the meaning of particular input parameters, etc.    & 1-2, 11-12, 25-27    & \citep{committeeonreproducibilityandreplicabilityinscienceReproducibilityReplicabilityScience2019,belhajjameResearchObjectSuite2014,grykWorkflowsProvenanceInformation2017,stoddenEnhancingReproducibilityComputational2016}   \\
+    & SC2   & Entity annotations                & The meaning of individual input and output data entities. Why were they chosen? How are the results interpreted?          & 1-5, 13, 28-29, 67-69  &   \\
+    & SC3   & Workflow execution annotations    & Annotations about a set of parameters in a particular workflow run. Allows to distinguish between the ROs of multiple workflow runs.             & 6-7, 30-31 &  \\
+\midrule
+T2  & D1    & Data identification               & Persistent identifier (PID), version, name and description of the dataset. Preferred citation of the data. \emph{When the data is not FAIR:} URL and download date as an alternative for PID and version. \emph{When the dataset is a subset of a larger collection (e.g. a database):} PID of database, database version and download date, and the query or filtering strategy which produced the dataset.    & 13-16, 32-36, 47, 67-69 & \citep{datacitationsynthesisgroupJointDeclarationData2014} \\
+    & D2    & File characteristics              & Filename, format, creation and last modification timestamps, size, and checksum.  & 15, 48  &  \\
+    & D3    & Data access                       & URL to a downloadable form of the data. License.   &  8, 49  & \\
+    & D4    & Parameter mapping                 & The workflow and step parameters for which the data is an input or output.   & 37-38 &   \\
+\midrule
+T3  & SW1   & Software identification           & PID, name, version, release date and description of the software. Preferred citation. \textit{When the software is not FAIR:} URL of repository, download date and/or git commit hash as substitute for PID, version or release date.       &  16-20, 50     &   \citep{smithSoftwareCitationPrinciples2016} \\
+    & SW2   & Software documentation            & URL of documentation or other metadata which is important to make informed use of the tool. URL to repository with source code of the software. &  39-40, 51-52  & \\
+    & SW3   & Software access                   & URL to downloadable, executable form of the software. License.               &  9, 53  & \\
+\midrule
+T4  & WF1   & General software metadata         & At workflow and step level, according to T3.                 & 12, 21-23, 41, 70 & \citep{gobleFAIRComputationalWorkflows2020}\\
+    & WF2   & Workflow parameters               & Type, format, and description, at workflow and step-level.                & 42-44  & \\
+    & WF3   & Workflow requirements             & Software and hardware resources which are required to execute the workflow or workflow steps. &  54-56  & \\
+\midrule
+T5  & ENV1  & Software environment              & Software (dependencies), operating system. Dependencies could comprise all installed software (might contain much redundant information if a step was not executed in a software container), or the dependencies of the software which is run (which may be difficult to identify). Should follow the requirements as described in T3.       &    57     &  \citep{committeeonreproducibilityandreplicabilityinscienceReproducibilityReplicabilityScience2019}  \\
+    & ENV2  & Hardware environment              & Available RAM, storage, number and type of CPUs and GPUs. Network access.       &    58        & \\
+    & ENV3  & Container image                   & Image name, tag and digest (because names and tags are not stable). Additional metadata (extracted from image labels), contents of Dockerfile (if built from Dockerfile), and general requirements for software as described in SW1.                & 24, 59-60 &  \\
+\midrule
+T6  & EX1   & Execution timestamps              & When the workflow was executed, at step-granularity. The timestamps can be helpful when files were downloaded during the execution, especially from a database which does not have clear versions. In addition, the duration of the execution may be important during workflow development (test different settings) and when reproducing the workflow. & 1-5, 10, 61-63 &   \\
+    & EX2   & Consumed resources             & The resources used during execution, at step-granularity. This is different from what was described in WF3, because there we only described what was available, not what was actually used.  & 7, 64  &  \\
+    & EX3   & Workflow engine                   & Software, therefore with same metadata as general software entities (T3).             & 45, 65 & \\
+    & EX4   & Human agent                       & At a minimum, a PID such as ORCID should be included, or name and email of the person who ran the workflow. These details may be important for attribution (U2), and can also be used by third parties to ask further questions about the research.                 & 46, 66 &  \\
+\bottomrule
+\end{tabularx}
+
+
+% \begin{tablenotes}
+% \item Source is from this website: \url{https://www.sedl.org/afterschool/toolkits/science/pdf/ast_sci_data_tables_sample.pdf}
+% \end{tablenotes}
+\end{table*}

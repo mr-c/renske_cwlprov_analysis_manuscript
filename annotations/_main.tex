@@ -1,0 +1,17 @@
+\subsection{Proposed scheme for the annotation of input data}
+
+% \todorenske{Given the length of the subsequent sections, would it be better to describe the 2 improvements in 1 section `Extensions to CWLProv', with separate subsections for annotation scheme, RDF extension, and `Analysis'?}
+
+In the previous sections, we identified a set of useful provenance metadata given 5 realistic use case scenarios, summarized this into a taxonomy, and used this to perform a qualitative analysis of the current CWLProv community standard. From this analysis, we concluded that although manual annotations can be added to the workflow and parameter files to enrich the provenance, the CWL Standards do not formally specify how this information should be included. In this section, we aim to standardize the annotation of input data, proposing a scheme which enables authors to describe individual inputs as well as a complete workflow run (i.e., the combination of a particular workflow design and its configuration settings, \textbf{SC3}). 
+
+Rather than designing our own ontology, the core vocabulary of our annotation scheme reuses the Bioschemas \citep{michelBioschemasSchemaOrg2018} \emph{Dataset} profile (v1.0), an extension of Schema.org \cite{guhaBigDataMakes2015} for life sciences. The terms listed in Table \ref{tab:dataset_bioschemas} allow authors to express generic characteristics of their input datasets, such as the identifier, version, and license. In addition, to convey information about the \emph{meaning} of the data, we recommend the use of other, domain-specific ontologies, e.g. EDAM \cite{isonEDAMOntologyBioinformatics2013}. 
+
+In many cases, input datasets may be the result of a series of operations prior to workflow execution, from retrieval from a database to filtering and cleaning operations. We advise to encode this history as a sequence of Schema.org \emph{Actions}, each associated with their own instruments, queries, and times (Table \ref{tab:action_schemaorg}). 
+
+% \todorenske{Add a figure with example annotation, incorporating all three features of the annotation scheme.}
+
+Figure \ref{fig:ex_annotations} shows an example of how to apply the annotation scheme in practice. This is a parameter file with two workflow input values. The first is a standalone dataset with its own identifier and version. The second dataset is the result of a database query and subsequent filtering. The metadata is separated from the rest of the input parameters by a dedicated \emph{cwlprov:prov} field. Finally, a description of the entire workflow run is given in the root of the document.
+
+The details of the design, as well as more extensive examples of how to apply the scheme in practice, are provided in the Supplementary Material (Section \emph{\nameref{sup:annotation}}).
+
+\input{annotations/fig_example_annotations}

@@ -1,0 +1,51 @@
+\section{Related work}
+\label{sec:background}
+\todorenske{I need feedback on the structure. Currently it is 1) Standards for metadata of workflow components, like data, software, ... 2) Standards for the relationship between the components (workflows, provenance models, ROs, 3) Previous analyses of provenance solutions. I'm mostly struggling with 3), I think there is something missing.}
+% \todorenske{Not sure if this is redundant (I had to explain a lot in the introduction already). Integrate with related work section?}
+
+In this paper, we describe the analysis and improvement of CWLProv, a standard for the preservation of CWL workflow executions. In this section, we aim to position our work into the broader context of the literature. Firstly, we discuss current standards for the preservation of data, software, and how these are linked together into workflows. We discuss the concept of workflow-centric research objects and its implementation in CWLProv. Finally, we highlight previous work on the analysis of provenance solutions based on use case analyses. 
+
+\subsection{Metadata standards}
+% Preservation of workflow building blocks is important
+To achieve computational reproducibility, i.e. \emph{``the ability to obtain consistent results, using the same input data, computational steps, methods, and code; and conditions of analysis''} \cite{committeeonreproducibilityandreplicabilityinscienceReproducibilityReplicabilityScience2019}, it is firstly necessary that the individual building blocks of the analysis are preserved. Fundamental in this research area are the FAIR principles \cite{wilkinsonFAIRGuidingPrinciples2016}, which describe how data and other resources can be made Findable, Accessible, Interoperable, and Reusable, notably through their description with rich metadata in a machine-accessible format. 
+
+In compliance with this work, scientific communities have defined their own standards for metadata. Some of these standards are applicable across many domains, such as the data \cite{datacitationsynthesisgroupJointDeclarationData2014} and software \cite{smithSoftwareCitationPrinciples2016} citation principles, while others are highly specialized towards one particular domain. 
+
+Communities have also developed ontologies and vocabularies for the representation of this information in a machine-accessible format, such as the EDAM ontology \cite{isonEDAMOntologyBioinformatics2013}, which can be used to express concepts relevant to the field of bioinformatics. Metadata standards and ontologies are applied in dedicated data and software repositories and registries, such as bio.tools \cite{isonBioToolsRegistry2019} and Zenodo (CITE). A full overview of the landscape of metadata standards is beyond the scope of this paper and can be found in \cite{leipzigRoleMetadataReproducible2021} and on FAIRSharing.org.
+
+\subsection{Workflow-centric research objects}
+% The methods (which we require for computational reproducibility) together comprise the provenance of the results. 
+
+The relation between different components of the analysis can be preserved through \emph{workflow thinking} \cite{grykWorkflowsProvenanceInformation2017}, i.e. dividing a computational process into a series of steps, with the output of one step becoming the input for another. Workflows can be visualized as a directed graph, where the nodes represent the operations and the edges the data flows between them.
+
+Workflows can be described in many different ways, from simple shell scripts to dedicated workflow languages such as Snakemake (CITE) and Nextflow (CITE). Common Workflow Language \cite{crusoeMethodsIncludedStandardizing2022} is a standard for workflow descriptions which in addition to the sequence of operations (steps) also facilitates specification of software and hardware requirements and annotation of workflow (components) with metadata to make the analysis more easily understandable (Table \ref{tab:metadata_fields}). Although differences in quality certainly exist, there is currently not one workflow language which is the best option for all types of computational analyses.
+
+\todorenske{Rephrase the last sentence ;)}
+
+Whereas a good workflow description reflects the \emph{prospective provenance} of the results, ROs \cite{bechhoferWhyLinkedData2011} also contain \emph{retrospective provenance}. \textbf{(Which paper to cite for prospective/retrospective provenance?) } CWLProv is a specialization of the \emph{RO Bundle} serialization, an implementation of the \emph{Wf4Ever workflow-centric RO model} \cite{belhajjameWorkflowcentricResearchObjects2012}. \emph{RO Bundles} are data structures storing the CWL workflow description, input parameter file, all input and (intermediate) output data, and the provenance record describing the relations between the contained data entities and the workflow. 
+
+To describe provenance, CWLProv adheres to the PROV-DM standard \cite{moreauPROVDMPROVData2013}. In short, PROV-DM represents the provenance record as a directed graph, in which \emph{Entities} (e.g. input files) are subjected to one or multiple \emph{Activities} (e.g. a filtering step) initiated by \emph{Agents} (e.g. a person or the workflow engine). Each of these can be further described with additional properties, often borrowed from other ontologies. For example, the \emph{wfdesc} \cite{soiland-reyesWfdescOntology2016} and \emph{wfprov} \cite{soiland-reyesWfprovOntology2016} ontologies are utilized to express workflow-specific concepts, for which the generic, domain-neutral PROV-DM vocabulary is not rich enough. The provenance graph is encoded in Resource Description Format (RDF) \cite{cyganiakRDFConceptsAbstract2014}, a machine-accessible format which can be queried with SPARQL \cite{thew3csparqlworkinggroupSPARQLOverview2013}.
+
+Besides CWLProv, a number of other initiatives exist. The most recent of efforts is RO-Crate \cite{soiland-reyesPackagingResearchArtefacts2022}, a family of workflow language-agnostic RO specifications, which instead of the PROV ontology uses Schema.org to describe the provenance of the results. RO-Crate is defined at different levels of increasing granularity, from individual workflows, to a standard which is currently under development and was partly informed by the CWLProv specification. In addition to workflow specifications, related efforts such as BioCompute Objects also exist \cite{alterovitzEnablingPrecisionMedicine2018}. 
+\todorenske{Which RO specifications are most relevant and should be included?} 
+
+\subsection{Analysis}
+
+Several previous efforts have defined standards and recommendations to enhance provenance, often based on selected real-life use case workflows. Firstly, Garijo et al. \cite{garijoQuantifyingReproducibilityComputational2013} attempted to reproduce a workflow published several years prior, thereby quantifying the number of hours required for scientists at 4 different levels of expertise. Based on their experience, they formulated a list of recommendations for workflow authors. 
+
+Kanwal et al. \cite{kanwalInvestigatingReproducibilityTracking2017} applied a slightly different method in which they expressed the same workflow concept in three different languages or platforms, one of which was CWL. They identified assumptions inherent to the platforms which might compromise reproducibility at a later stage, and proposed solutions to mitigate these challenges. 
+
+Finally, in the field of computational physics, Krafczyk et al. \cite{krafczykLearningReproducingComputational2021} composed a set of principles and associated guidelines, informed by their experience in reproducing the results of 7 publications. They also specify the Reproduction Package, a directory structure which puts the proposed principles and guidelines into practice.
+
+How our work differs from previous work: 1) Here we analyze a specification instead of individual analyses. 2) Our approach is more systematic. 3) ??
+
+\todorenske{Discuss content of last paragraph + rephrase.}
+
+
+
+\begin{itemize}
+
+    % \item \cite{samuelUnderstandingExperimentsResearch2021} maybe not worth mentioning
+    % \item \cite{wittnerLightweightDistributedProvenance2022} Distributed provenance model fo complex real-world environments.
+    % \item \cite{krafczykLearningReproducingComputational2021} Learning from reproducing computational results: introducing three principles and the Reproduction Package
+\end{itemize}

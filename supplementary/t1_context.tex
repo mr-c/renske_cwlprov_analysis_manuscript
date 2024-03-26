@@ -1,0 +1,17 @@
+\section{Taxonomy}
+
+\subsection{\ref{tax:context}: Definition of metadata for scientific context}
+\label{sec:reasoning_reqs}
+
+In ??, we presented scientific context (\ref{tax:context}) as one of the aspects that should be present in the collected provenance. In this section, we elaborate on what we mean with scientific reasoning and how it should be incorporated in provenance.
+
+\textbf{Why:} Representing the scientific thinking process in provenance is meant to make the connection between the article advertising the research and the research itself, contained in the RO. This connection is bidirectional: ROs can be used as a guide during manuscript writing as well as for providing context for a third party who has read the paper and wants to understand the analysis in more depth.
+
+\textbf{What:} The scientific context covers many aspects of the research, from the reasons why particular input data and parameter settings were chosen \cite{committeeonreproducibilityandreplicabilityinscienceReproducibilityReplicabilityScience2019}, to the design of the workflow (why particular steps were included), to the rationale for the study and the overall hypothesis of the research \cite{belhajjameResearchObjectSuite2014}\cite{grykWorkflowsProvenanceInformation2017}. Even negative results can be reported and explored strategies which did not work can be included \cite{stoddenEnhancingReproducibilityComputational2016}. In addition, it can include the interpretation of the results and their implications on the field (or maybe the output of an intermediate step warrants the inclusion of another preprocessing step).
+
+\textbf{How:} We classify scientific context into 3 components:
+\begin{enumerate}[label=\textbf{SC\arabic*}]
+    \item \textbf{Workflow design}. Annotations on the design of the workflow and its components. Purpose of the workflow, why steps were included or excluded, the meaning of particular input parameters, etc. \label{req:sr_wf}
+    \item \textbf{Entity annotations}: The meaning of individual input and output data entities. Why were they chosen? How are the results interpreted? \label{req:sr_data}
+    \item \textbf{Workflow execution annotations}: Annotations about a set of parameters in a particular workflow run. Allows to distinguish between the ROs of multiple workflow runs. \label{req:sr_ex}
+\end{enumerate}

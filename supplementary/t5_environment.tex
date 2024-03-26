@@ -1,0 +1,20 @@
+\subsection{\ref{tax:env}: Definition of metadata for computational environment}
+\label{sec:env_reqs}
+
+In this section, we describe the requirements for computational environment (\ref{tax:env}).
+
+\textbf{What}: Environment encompasses both software and hardware infrastructure, and may be part of a software container.
+
+\textbf{Why}: Information about the computational environment is important for reproducing the workflow (\ref{uc:reproducing}). 
+
+\begin{itemize}
+    \item \textbf{Required resources:} Details about the resources available on the system which executed the original analysis can give an indication of what is necessary to rerun the workflow, even if this is not documented in the workflow description.
+    \item \textbf{Debugging:} The generated output (or executability) of a step may be sensitive to specific versions of the tool orchestrated by the step or its dependencies.
+\end{itemize}
+
+\textbf{How}: We discriminate between three components of the computational environment:
+\begin{enumerate}[label=\textbf{ENV\arabic*}]
+    \item \textbf{Software}: software (dependencies), operating system. Dependencies could comprise all installed software (might contain much redundant information if a step was not executed in a software container), or the dependencies of the software which is run (which may be difficult to identify). Should follow the requirements as described in \Cref{sec:software_reqs}. \label{req:env_software}
+    \item \textbf{Hardware}: Available RAM, storage, number and type of CPUs and GPUs. Network access. \label{req:env_hardware}
+    \item \textbf{Container image}: Image name, tag and digest (because names and tags are not stable). Additional metadata (extracted from image labels), contents of Dockerfile (if built from Dockerfile), and general requirements for software as described in \Cref{sec:software_reqs}. \label{req:env_image}
+\end{enumerate}

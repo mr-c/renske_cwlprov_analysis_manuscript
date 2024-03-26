@@ -1,0 +1,20 @@
+\subsection{Proposed extension of the RDF provenance graph}
+\label{sec:prov_rdf_extension}
+In our analysis of CWLProv, described in the previous sections, we observed that much of the metadata was absent from the RDF representation of the execution. In this section, we describe the design and implementation of an extension to the provenance graph, in order to make more of the analysis accessible to exploration with SPARQL queries. 
+
+
+
+Primarily, we aimed to expand the description of the workflow (i.e. \emph{prospective provenance}). Whereas the original design only mentioned the top-level workflow and its steps, the extended design incorporates all components for which the CWL Standards specify metadata fields (Table \ref{tab:metadata_fields}). In addition, provenance metadata supplied according to the annotation scheme described in the previous section is propagated to RDF. The details of the design are described in Supplementary Material (Section \emph{\nameref{sec:dev_recommendatons}}). 
+% \stodor{explicitly where in the supplemental materials? with link}
+
+We \stodor{TODO (Michael)} realized the extended design in the CWL reference implementation \emph{cwltool}. Repeating the analysis of CWLProv, we found that the extended RDF graph is notably richer in provenance metadata (Table \ref{tab:rdf_after}). Although still dependent on manual input from the workflow author, \textbf{Scientific context (\ref{tax:context})} is now fully represented in RDF, as well as \textbf{Data (\ref{tax:data})} and \textbf{Workflow (\ref{tax:wf})}. Future work should focus on the representation of workflow resource requirements, as well as computational environment. A list of SPARQL queries \stodor{TODO (Renske)} can be found in the Supplementary Material (Section \emph{\nameref{sup:sparql}}). 
+
+
+\input{rdf_extension/table_rdf_after.tex}
+
+%\input{rdf_extension/table_metadata_terms.tex}
+
+
+% \input{rdf_extension/rdf_extension.tex}
+
+% \input{rdf_extension/rdf_extension_actions.tex}

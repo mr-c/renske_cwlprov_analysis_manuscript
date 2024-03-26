@@ -1,0 +1,26 @@
+\begin{table*}[bt!]
+\caption{Overview of provenance taxonomy. Integrated with already accepted principles and guidelines.
+\todorenske{1. link to provenance questions. 2. What should go in Refs? Only officially defined standards like FAIR principles/data citation principles or also random publications which mention that including something may be necessary?}}\label{tab:taxonomy}
+% Use "S" column identifier (from siunitx) to align on decimal point.
+% Use "L", "R" or "C" column identifier for auto-wrapping columns with tabularx.
+
+\begin{tabularx}{\linewidth}{l l l L l l}
+\toprule
+{Type} & {Subtype} & {Name} & {Metadata} & {Source} & {provquestions} \\
+\midrule
+T1  & {SC1}   & Workflow design  & Annotations on the design of the workflow and its components. Purpose of the workflow, why steps were included or excluded, the meaning of particular input parameters, etc.         & \citep{committeeonreproducibilityandreplicabilityinscienceReproducibilityReplicabilityScience2019,belhajjameResearchObjectSuite2014,grykWorkflowsProvenanceInformation2017,stoddenEnhancingReproducibilityComputational2016}    & \\
+    & SC2   & Entity annotations                & The meaning of individual input and output data entities. Why were they chosen? How are the results interpreted?          &     \\
+    & SC3   & Workflow execution annotations    & Annotations about a set of parameters in a particular workflow run. Allows to distinguish between the ROs of multiple workflow runs.             &     & \\
+
+
+
+
+
+\bottomrule
+\end{tabularx}
+
+
+% \begin{tablenotes}
+% \item Source is from this website: \url{https://www.sedl.org/afterschool/toolkits/science/pdf/ast_sci_data_tables_sample.pdf}
+% \end{tablenotes}
+\end{table*}

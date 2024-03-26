@@ -1,0 +1,104 @@
+\section{Provenance questions}\label{sup:provquestions}
+
+% \todorenske{How to organize this section? Idea 1: leave it as it is. Idea 2: Make sideways table with 1 question per row, add columns for each use case (U1 - U5) and provenance subcomponent (SC1, SC2, SC3, D1, ...). Indicate for which use case and provenance component each question is applicable. }
+
+\newlist{provquestions}{enumerate}{1}
+\setlist[provquestions, 1]
+{label=Q\arabic{provquestionsi}., %1., 2., 3., ...
+leftmargin=2\parindent,
+rightmargin=10pt
+}
+
+
+\subsection*{\ref{uc:wf_dev}: Workflow development}
+
+\begin{provquestions}
+    \item What is the influence of including filtering step X on performance? (SC1, SC2, EX1)
+    \item What is the influence of a different model architecture on performance? (SC1, SC2, EX1)
+    \item What is the influence of a different training set on performance? (SC2, EX1)
+    \item What is the influence of a different value for input parameter X on performance? (SC2, EX1)
+    \item What is the influence of removing model training feature X on performance? (SC2, EX1)
+    \item What is the difference between workflow runs X and Y? (SC3)
+    \item Which of workflow runs X and Y used more RAM? (SC3, EX2)
+    \item Under which conditions am I allowed to reuse this third-party dataset as input for my workflow? (D3)
+    \item Under which conditions am I allowed to reuse this third-party software tool for my workflow? (SW3)
+    \item What is the influence of ... on training time? (EX1)
+\end{provquestions}
+
+\subsection{\ref{uc:writing}: Publishing the workflow}
+\begin{provquestions}[resume]
+    \item On which previous research was this research built (conceptually)? (SC1)
+    \item Which of my colleagues contributed to the conceptualization of this research? What were their contributions? (SC1, WF1, EX4)
+    \item Which cleaning operations were performed on workflow input X? (SC2, D1)
+    \item Which were all the datasets I used as inputs and should be cited? (D1)
+    \item When was dataset X downloaded from database Y? (D1, D2)
+    \item What are all the resources which contributed to this research (and should be cited)? (D1, SW1)
+    \item Which software was used in this workflow? (SW1)
+    \item I reused a custom, unpublished script made by one of my collaborators. How do I give credit to the original authors? (SW1)
+    \item I wrote a custom script based on existing code. How do I give credit to the original authors? (SW1)
+    \item I wrote a CWL \emph{CommandLineTool} description for existing software. How do I cite it? (SW1)
+    \item I reused an existing CWL CommandLineTool description. How do I give credit to the original authors? (WF1)
+    \item Which of my colleagues contributed to this workflow to whom I should give credit and/or propose as co-authors? What were their contributions? (WF1)
+    \item From which workflow(s) was this workflow derived? (WF1)
+    \item I reused a Dockerfile or Docker container image which was written or built by someone else. How do I give credit to the original authors? (ENV3)
+\end{provquestions}
+
+\subsection{\ref{uc:understanding}: Understanding the workflow}
+\begin{provquestions}[resume]
+    \item What is the goal of this analysis? (SC1)  
+    \item Why was this step included? (SC1)
+    \item Why was this combination of steps chosen? (SC1)
+    \item What is the interpretation of this (intermediate) output?  (SC2)
+    \item What was the performance of the model? (SC2)
+    \item What was the hypothesis of this workflow run? (SC3)
+    \item Why was this set of values chosen as inputs for this workflow execution? (SC3)
+    \item Where can I find more information about BioDL dataset? (D1)
+    \item Which SAbDab query was used to generate the summary file? (D1)
+    \item Which UniProt IDs are part of BioDL? (D1)
+    \item Which query was issued to PDB? (D1)
+    \item How was this figure from the paper generated? (D1)
+    \item For which workflow parameter is this dataset an input? (D4)
+    \item Which workflow step produced this output file? (D4)
+    \item What was the model architecture? (SW2)
+    \item Which related tasks were predicted by the model? (SW2)
+    \item How were UniProt IDs mapped to PDB IDs? (WF1)
+    \item Which input features were used for the model? (WF2)
+    \item What are the values of PSP19 for each amino acid type? (WF2)
+    \item What is the format of this output file? (WF2)
+    \item How should I cite \emph{cwltool}? (EX3)
+    \item Who can I contact for more information about the research? (EX4)
+\end{provquestions}
+
+\subsection{\ref{uc:reproducing}: Reproducing the workflow}
+
+\begin{provquestions}[resume]
+    \item Which HHBlits reference database was used? Which version? (D1)
+    \item What was the last modification date of this input file? (D2)
+    \item Where can I download HHBlits reference database? (It was not stored in the RO because of its large size.) (D3)
+    \item Which version of HHBlits was used? (SW1)
+    \item The CWL \emph{CommandLineTool} description did not describe all parameters of this command-line program. Which values were used for the other parameters? (SW2)
+    \item Which format does the PDB batch download script need? (SW2)
+    \item Where can I download HHBlits? (SW3)
+    \item Does this step need network access? (WF3)
+    \item How many CPUs are required for this step, according to the workflow description? (WF3)
+    \item How much RAM is necessary for this step, according to the workflow description? (WF3)
+    \item Which software (and their versions) was installed on the system? (ENV1) 
+    \item Which CPU/GPU was installed? (ENV2)
+    \item Original author used Dockerfile. Is the image I built on a rerun the same as the one in the original analysis?  (ENV3)
+    \item I pulled a Docker image. Is this the same as which was used in the original analysis? (ENV3)
+    \item How long does this step take? (EX1)
+    \item When was PDB database queried? (EX1)
+    \item When was SAbDab database queried? (EX1)
+    \item How much memory was used in the original run? (EX2)
+    \item Which version of \emph{cwltool} was used in the original run? (EX3)
+    \item Who ran the original workflow and how can I contact them for more information? (EX4)
+\end{provquestions}
+
+\subsection{\ref{uc:service}: Model as a web service}
+
+\begin{provquestions}[resume]
+    \item What was the query which returned the set of proteins for which I made predictions with the model? (SC2, D1)
+    \item Which protein sequences were in the training set? (SC2, D1)
+    \item Which proteins had epitope annotations? (SC2, D1)
+    \item How should I cite this tool? (WF1)
+\end{provquestions}

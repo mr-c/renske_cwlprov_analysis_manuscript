@@ -1,0 +1,61 @@
+\begin{figure*}[!ht]
+    \centering 
+    \caption{Simplified example of our annotation scheme for workflow inputs. The first input (\emph{standalone\_dataset}) is a dataset stored in a FAIR repository, with an identifier and version. The second input (\emph{filtered\_pdb\_dataset}) is the result of a database search (\emph{pdb\_search}) and subsequent filtering (\emph{filtering\_action}).}
+    % \todorenske{insert structured query for pdb\_search}
+    \todorenske{@Michael, is a string broken up over multiple lines (s:query; line 4-18) valid in YAML?}
+    \begin{minted}[linenos,xleftmargin=\parindent, breaklines, frame=single]{yaml}
+cwlprov:prov:
+  pdb_search:
+    s:additionalType: s:SearchAction
+    s:query: "{
+            'query': {
+                'type': 'terminal',
+                'service': 'text',
+                'parameters': {
+                    'attribute': 'rcsb_accession_info.deposit_date',
+                    'operator': 'range',
+                    'value': {
+                        'from': '2010-01-01',
+                        'to': '2022-08-01'
+                    }
+                }
+            },
+            'return_type': 'entry'
+        }"
+    s:object:
+      s:identifier: https://bio.tools/pdb
+    s:result: pdb_search_result
+    s:endTime: 2022-08-01
+    s:description: "All entries deposited between 2010 and 2022"
+      
+  filtering_action:
+    s:additionalType: s:Action
+    s:object: pdb_search_result
+    s:instrument: 
+      s:identifier: https://bio.tools/pisces
+    s:result: filtered_pdb_dataset
+
+filtered_pdb_dataset:
+  class: Directory
+  location: path://path/to/directory/
+  
+standalone_dataset:
+  class: File
+  location: path://path/to/file1.pdb
+  format: edam:format_1476 # pdb
+  s:identifier: https://doi.org/10.2210/pdb6nzn/pdb 
+  s:version: "1.4"
+  s:description: "Amyloid fibril structure of glucagon in pdb format."
+
+s:description: "Example workflow run with 2 inputs."
+
+$namespaces:
+  s: "https://schema.org/"
+  edam: "http://edamontology.org/"
+
+$schemas:
+- https://schema.org/version/latest/schemaorg-current-https.rdf
+- https://edamontology.org/EDAM_1.25.owl
+    \end{minted}
+    \label{fig:ex_annotations}
+\end{figure*}

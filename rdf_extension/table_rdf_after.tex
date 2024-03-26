@@ -1,0 +1,43 @@
+\begin{table}[ht!]
+\caption{RDF provenance graph after extension. The table shows for each taxonomy component whether it is fully (black) or partially represented (white), highlighting elements with improved representation in the extended design (\FiveStar). Components which are not represented in any of the documents are marked with an asterisk ($\ast$). Representations which are only included when this metadata is manually supplied are indicated with parentheses.}\label{tab:rdf_after}
+% Use "S" column identifier (from siunitx) to align on decimal point.
+% Use "L", "R" or "C" column identifier for auto-wrapping columns with tabularx.
+% \todorenske{D2?}
+% \todorenske{What about intermediate output data? Is there annotation for those possible? If not, shouldn't we change it to partial, instead of full representation?}
+\begin{tabularx}{\linewidth}{l l L l }
+\toprule
+{Type} & {Subtype} & {Name} & {structured (RDF)} \\
+\midrule
+T1  & {SC1}  & Workflow design  & (\FiveStar)    \\
+    & SC2   & Entity annotations                & (\FiveStar)     \\
+    & SC3   & Workflow execution annotations   &  (\FiveStar)    \\
+\midrule
+T2  & D1    & Data identification               & (\FiveStar)     \\
+    & D2    & File characteristics              & $\medsquare$ \\
+    & D3    & Data access                       & (\FiveStar) \\
+    & D4    & Parameter mapping                 & $\medblacksquare$  \\
+\midrule
+T3  & SW1   & Software identification           & ~  \\
+    & SW2   & Software documentation            & ~ \\
+    & SW3   & Software access                   & ~  \\
+\midrule
+T4  & WF1   & Workflow software metadata        & (\FiveStar) \\
+    & WF2   & Workflow parameters               & (\FiveStar) \\
+    & WF3   & Workflow requirements             & ~ \\
+\midrule
+T5  & ENV1  & Software environment $\ast$       & ~  \\
+    & ENV2  & Hardware environment $\ast$       & ~ \\
+    & ENV3  & Container image                   & $\medsquare$ \\
+\midrule
+T6  & EX1   & Execution timestamps              &  $\medblacksquare$\\
+    & EX2   & Consumed resources                &  ~ \\
+    & EX3   & Workflow engine                   & $\medsquare$ \\
+    & EX4   & Human agent                       & $\medblacksquare$  \\
+\bottomrule
+\end{tabularx}
+
+
+% \begin{tablenotes}
+% \item Source is from this website: \url{https://www.sedl.org/afterschool/toolkits/science/pdf/ast_sci_data_tables_sample.pdf}
+% \end{tablenotes}
+\end{table}

@@ -1,0 +1,41 @@
+\section{Use case workflow}
+\label{sec:workflow}
+
+This section describes the use case workflow.
+
+As an example case for this study, we used a previously published model for protein-protein interaction (PPI) prediction \cite{capelMultiTaskLearningLeverage2022}. However, to improve reproducibility we converted this to a workflow incorporating the calculation of the features and labels for training and prediction. 
+
+We chose this workflow because it involves a number of elements which make reproducibility difficult. Firstly, it requires input data from databases which are continually updated. Secondly, during model development there are several different model designs that are tested, input parameter configurations and it is difficult to keep track of the versions. Also a number of tools are used with each their own versions. Another common problem: identifier mapping. Also different tools with different dependencies. Finally, this workflow is intended to be used to generate predictions for proteins for which the PPI residues are unknown, ...
+
+\subsection{Protein-protein prediction}
+
+Short explanation of the reason behind protein-protein prediction.
+
+OK so why PPI prediction. Basically everything consists of proteins. Cells are made of proteins, proteins perform the critical chemical reactions in the cell. Proteins interact with each other to make this happen. They bind to each other and form complexes. What these complexes look like is very important for their function, because the shape of a protein determines what it does and what it binds to. 
+It is therefore important to know the interaction sites of proteins. And also to UNDERSTAND why and how proteins interact, because structure is quite complicated.
+
+Many diseases involve proteins with altered structure, thereby changing the functionality of the protein.
+
+Other applications --> drug design?
+
+Which amino acids form the \emph{protein-protein interface} can be determined from the structure of the complex: usually amino acids within a certain distance from the partner protein are labeled as PPI residues.
+
+Resolving the structure for all complexes experimentally is infeasible. 
+
+In principle this can be done experimentally (determine the structure of the complex), but this is both costly and time-consuming. Therefore, much effort has been devoted to predict protein structure and interaction sites, based on the protein sequence. Sequence is used to calculate a number of features.
+
+\subsection{Structure of the workflow}
+
+The model predicts per residue whether it is part of the protein-protein interface or not. For this purpose it utilizes a multitask learning strategy, in which besides the main task (PPI or not) the model also learns to predict a number of related structural features, such as surface accessibility. This allows the model to be trained on a larger dataset (because there is more data available about structural features than PPI) and the idea is also that it makes training faster because there is relevant information hidden in the structural information (e.g. a residue is more likely to be part of the PPI when it is on the outside of the protein). 
+
+Besides the model, the workflow calculates a number of input features and labels used for training the model.
+
+The input labels are derived from the (experimentally derived) protein structures, downloaded from Protein Data Bank (CITE). 
+
+The input features are calculated based on protein sequence. These are ...
+
+\subsection{Implementation of the workflow}
+
+We implemented the workflow in CWL with a focus on reproducibility. 
+
+

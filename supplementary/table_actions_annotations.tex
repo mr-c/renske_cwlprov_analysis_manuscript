@@ -1,0 +1,18 @@
+\begin{table}[bt!]
+\caption{Schema.org terms to represent the history of data inputs.}\label{tab:action_schemaorg}
+\begin{tabularx}{\linewidth}{l l L}
+\toprule
+Schema.org & Expected type & Explanation \\
+\midrule
+% Widgets & 42 & Over-supplied\textsuperscript{*} \\
+% Gadgets & 13 & Under-supplied \\
+query & Text & Query used (only for SearchAction) \\ %\hline
+object & Thing & Database or initial dataset \\ %\hline
+result & Thing & Resulting dataset \\ %\hline
+instrument & Thing & Tool used, e.g. for filtering \\ %\hline
+endTime & DateTime, Time & Time of action \\ %\hline
+agent & Organization, Person & Who performed the action \\ %\hline
+description & Text & Description of the action \\ %\hline
+\bottomrule
+\end{tabularx}
+\end{table}

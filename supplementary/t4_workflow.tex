@@ -1,0 +1,15 @@
+\subsection{\ref{tax:wf}: Definition of metadata for workflow}
+\label{sec:wf_reqs}
+
+In this section, we describe the metadata that is associated with the workflow (\ref{tax:wf}). 
+
+\textbf{What}: We define workflow here as the documents described in CWL (for other workflows, this would be the top-level script, not the underlying software that it controls). Hence the workflow comprises the main workflow description and the \emph{CommandLineTool} and nested \emph{Workflow} descriptions. 
+
+\textbf{Why}: Workflows provide both a high-level overview of the analysis as well as details which are difficult to convey in a textual format in the Methods section of a scientific article \cite{gilAutomatingDataNarratives2017}. In addition, workflows are software which should be preserved and reused \cite{gobleFAIRComputationalWorkflows2020}. 
+
+\textbf{How}: The metadata associated with workflows comprise general software metadata, in addition to workflow-specific information. 
+\begin{enumerate}[label=\textbf{WF\arabic*}]
+\item \textbf{General software metadata}: At workflow and step level, according to \Cref{sec:software_reqs}. \label{req:wf_all}
+\item \textbf{Parameters}: Type, format, and description, at workflow and step-level. \label{req:wf_param}
+\item \textbf{Requirements}: Software and hardware resources which are required to execute the workflow or workflow steps. \label{req:wf_resources}
+\end{enumerate}

@@ -1,0 +1,224 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Please note that whilst this template provides a 
+% preview of the typeset manuscript for submission, it 
+% will not necessarily be the final publication layout.
+%
+% letterpaper/a4paper: US/UK paper size toggle
+% num-refs/alpha-refs: numeric/author-year citation and bibliography toggle
+
+%\documentclass[letterpaper]{oup-contemporary}
+\documentclass[a4paper,num-refs]{oup-contemporary}
+
+%%% Journal toggle; only specific options recognised.
+%%% (Only "gigascience" and "general" are implemented now. Support for other journals is planned.)
+\journal{gigascience}
+
+\usepackage{graphicx}
+\usepackage{siunitx}
+
+%% added by Renske
+\usepackage{fdsymbol} % boxes in Tables
+\usepackage{bbding} % stars in Tables
+\usepackage{minted} % for the annotation scheme example
+%%% Flushend: You can add this package to automatically balance the final page, but if things go awry (e.g. section contents appearing out-of-order or entire blocks or paragraphs are coloured), remove it!
+% \usepackage{flushend}
+
+% \title{A Non-Intimidating Approach to Workflow Reproducibility in Bioinformatics: Adding Metadata to Research Objects through the Design and Evaluation of Use-Focused Extensions to CWLProv }
+\title{Workflow Provenance for the Bioinformatics Practitioner: Better Research Object Metadata through the Design and Evaluation of Use-Focused Extensions to CWLProv}
+
+%%% Use the \authfn to add symbols for additional footnotes, if any. 1 is reserved for correspondence emails; then continuing with 2 etc for contributions.
+\author[1,2, \authfn{1}]{Renske de Wit}
+\author[2,\authfn{2}]{Alexandru Iosup}
+\author[1,3, \authfn{3}]{Sanne Abeln}
+\author[1,2, \authfn{4}, \authfn{5}]{Michael R. Crusoe}
+
+\affil[1]{VU Bioinformatics Group, Dept. Computer Science, Vrije Universiteit Amsterdam}
+\affil[2]{Massivizing Computer Systems Group, Dept. Computer Science, Vrije Universiteit Amsterdam}
+\affil[3]{AI Technology for Life Group, Dept. Information and Computing Sciences and Dept. Biology, Utrecht University}
+
+
+
+%%% Author Notes
+\authnote{\authfn{1}r.d.wit@nki.nl ; \authfn{2}a.iosup@vu.nl ; \authfn{3}s.abeln@vu.nl ; \authfn{4}mrc@commonwl.org}
+\authnote{\authfn{5}Corresponding author.}
+
+% \authnote{\authfn{1}r.d.wit@nki.nl} 
+% \authnote{\authfn{2}a.iosup@vu.nl}
+% \authnote{\authfn{3}s.abeln@vu.nl}
+% \authnote{\authfn{4}michael.crusoe@vu.nl}
+% \authnote{\authfn{5}Corresponding author.}
+
+%%% Paper category
+\papercat{Research}
+
+%%% "Short" author for running page header
+\runningauthor{de Wit et al.}
+
+%%% Should only be set by an editor
+\jvolume{00}
+\jnumber{0}
+\jyear{2024}
+
+%% Added by Renske
+\setlength{\marginparwidth}{2cm}
+\usepackage{todonotes}
+\usepackage{listings}
+
+\lstset{breaklines=true}
+\usepackage{nameref}
+\usepackage{ragged2e}
+\usepackage{enumitem}
+\usepackage{doi}
+\newcommand{\todorenske}[1]{\todo[inline, color=orange!30]{Renske: #1}}
+\newcommand{\stodor}[1]{\todo[color=orange!30]{Renske: #1}}
+\newcommand{\status}[1]{\todo[inline, color=yellow!10]{Status: #1}}
+\newcommand{\todoalex}[1]{\todo[color=red!20]{Alex: #1}}
+\newcommand{\todomichael}[1]{\todo[color=blue!10]{Michael: #1}}
+\newcommand{\todosanne}[1]{\todo[color=green!10]{Sanne: #1}}
+\newcommand{\note}[1]{\textcolor{gray}{#1}}
+\newcommand{\noteai}[1]{\textcolor{red}{#1}}
+\newcommand{\notem}[1]{\textcolor{blue}{#1}}
+\begin{document}
+
+\begin{frontmatter}
+\maketitle
+
+% \todorenske{Figure out author order + affiliations}
+% \todorenske{Past or present tense throughout manuscript? Atm it is not consistent}
+\begin{abstract}
+% The Abstract (250 words maximum) should be structured to include the following details: 
+%%\todomichael{Abstract needs work}
+\textbf{Background}: %the context and purpose of the study; 
+Computational reproducibility is important for reuse of scientific research,
+% to increase trustworthiness of scientific results, 
+but is often not achieved across many domains of science due to the complexity of data and analysis pipelines. Workflow-centric research objects (ROs) have been proposed as a machine-accessible format for sharing computational research, encapsulating data as well as metadata to describe the provenance of the results. However, due to the large variety of metadata standards it is challenging to prioritize a set of provenance metadata %that is important for reproducibility.
+that is most useful in later stages of the research. 
+Here, we present a %general approach to define a standard for provenance 
+systematic approach to define such a set of metadata, and demonstrate how this strategy can guide the improvement of CWLProv, an existing RO specification for Common Workflow Language (CWL) workflows.
+% and use it to analyze and improve 
+% the current CWLProv community standard (v0.6.0).
+\textbf{Results}: %the main findings; 
+Instead of analyzing many workflows in a particular domain, we chose a single exemplary bioinformatics workflow and studied it in detail. 
+% performed a detailed analysis on one exemplary bioinformatics workflow. 
+Grounded in five realistic use case scenarios for ROs associated with the workflow, 
+we identified relevant provenance questions and defined the metadata required to answer them. 
+Subsequently, we analyzed the current CWLProv community standard for the representation of this metadata, distinguishing different qualities of representation. Finally, we used the insights gained from our analysis to design two extensions to CWLProv, addressing provenance requirements that were insufficiently represented before. 
+\textbf{Conclusions}: %brief summary and potential implications. 
+The method described here can aid workflow practitioners to identify the set of most useful metadata in their domain, and guide workflow system developers to implement automatic capture of provenance during workflow execution.  
+%Please minimize the use of abbreviations and do not cite references in the abstract.
+\end{abstract}
+
+
+\begin{keywords}
+provenance; research object; computational reproducibility; metadata; workflow; provenance analytics
+\end{keywords}
+\end{frontmatter}
+
+%%% Key points will be printed at top of second page
+%%% Michael: Key points are not part of the Gigascience template, I'm turning them off
+%%\begin{keypoints*}
+%%\todomichael{needs work}
+%%\begin{itemize}
+%%\item Research objects (ROs) have been proposed as a machine-accessible format to capture the provenance of workflow executions, improving the reuse and reproducibility of computational research.
+%%\item Due to a wide range in metadata standards and ontologies, it has become difficult for practitioners and workflow system developers to prioritize which metadata should be collected to meet the provenance requirements of real workflows.
+%%\item Here, we analyze the provenance requirements of one bioinformatics workflow in detail, and show how the results can be used to inform the development of RO specifications like CWLProv.
+% \item Computational reproducibility is important for reuse of scientific research, but often not achieved due to the complexity of data and analysis pipelines.
+% \item Machine-accessible provenance metadata, encapsulated in workflow-centric Research Objects (ROs), may improve reuse and reproducibility of computational research. 
+% \item Yet, deciding which metadata should be prioritized 
+%%\end{itemize}
+%%\end{keypoints*}
+
+\input{background/_main.tex}
+
+% \input{related_work/_main.tex}
+
+%\input{workflow/_main.tex}
+
+\input{taxonomy/_main.tex}
+
+\input{analysis/_main.tex}
+
+\input{annotations/_main.tex}
+
+\input{rdf_extension/_main.tex}
+
+% \input{data_description/_main.tex}
+
+
+
+\input{discussion/_main.tex}
+
+% \input{potential_implications/_main.tex}
+
+% \input{methods/_main.tex}
+
+
+
+
+
+
+\section{Availability of source code and requirements (optional, if code is present)}
+
+...
+
+\section{Availability of supporting data and materials}
+
+...
+
+\section{Declarations}
+
+\subsection{List of abbreviations}
+
+\begin{itemize}
+    \item CWL: Common Workflow Language
+    \item PID: Persistent Identifier
+    \item RO: Research Object
+    \item RDF: Resource Description Framework
+    \item SPARQL: SPARQL Protocol and RDF Query Language
+\end{itemize}
+
+\subsection{Consent for publication}
+
+Not applicable.
+
+\subsection{Competing Interests}
+
+The authors declare they have no competing interests.
+\stodor{Check if you agree.}
+
+\subsection{Funding}
+
+\todorenske{@Michael I don't know.}
+
+\subsection{Author's Contributions}
+\stodor{Please check if you agree, \url{https://credit.niso.org/}}
+
+\begin{itemize}
+\item RdW: formal analysis, investigation, software, visualization, writing - original draft.
+
+\item SA: conceptualization, funding acquisition, methodology, writing - review and editing.
+
+\item AI: conceptualization, funding acquisition, methodology, supervision, writing - review and editing.
+
+\item MRC: conceptualization, methodology, software, supervision, writing - review and editing.
+\end{itemize}
+
+\section{Acknowledgements}
+
+BAZIS compute cluster
+
+Katharina Waury
+
+% \section{Authors' information (optional)}
+
+% ...
+
+
+%% Specify your .bib file name here, without the extension
+\bibliography{paper-refs}
+
+
+
+\input{supplementary/_main.tex}
+
+\end{document}

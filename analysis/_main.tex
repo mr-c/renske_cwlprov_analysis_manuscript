@@ -1,0 +1,59 @@
+\subsection{Qualitative analysis of the CWLProv community standard}
+
+\label{sec:cwlprov_evaluation}
+
+% \todorenske{Alternative title: Qualitative analysis of CWLProv  0.6.0}
+% \todorenske{If we want the title to reflect the main result, what is the main result of the analysis?}
+% \todorenske{Keep subheadings? }
+
+\input{analysis/analysis_table.tex}
+
+In the previous section, we defined a set of metadata that should be included in provenance in order to meet specific use cases of ROs associated with an exemplary bioinformatics workflow. It is however also important to consider \emph{how} the metadata is included in the RO. In this section, we describe a qualitative analysis of the current CWLProv community standard (v0.6.0). %in order to decide how to extend the specification to meet the requirements associated with real-life workflows. 
+We evaluated the representation of each component of the provenance taxonomy defined in the previous section, distinguishing between different qualities of representation. In later sections, we describe how we used the results of our analysis to extend the CWLProv specification to meet the requirements associated with real-life workflows.
+
+% Now some methods of the analysis
+% \subsection{Method}
+% In this section, we explain the method we followed to assess CWLProv 0.6.0. 
+
+Our analysis was based on RO Bundles generated with the CWL reference implementation \emph{cwltool}\footnote{
+\mintinline{bash}|cwltool --provenance ./cwlprov_ro wf.cwl input_params.yml|
+}.
+% \todorenske{mention "\-\-provenance" or otherwise link to details on how this was done.}. 
+
+% \lstinline@\verb{cwltool --provenance alsdjfl lskdfjlj lsdkjflsdkjf sdf}@
+For each component of the provenance taxonomy, we evaluated the presence of the component in three levels of representation: structured representation in RDF (provenance graph and \emph{manifest.json}), structured annotations in CWL-specific documents (\emph{packed.cwl}, \emph{primary-job.json}, and \emph{primary-output.json}), and unstructured representation (e.g., the execution log). 
+
+We also considered the amount of effort that is required to add the metadata: manual annotations require much more input from the workflow author than metadata that is automatically extracted by the workflow engine.
+
+We considered a component \emph{fully represented} if it is included in the document by default, or if the CWL Standards provide clear guidelines for its manual annotation in a workflow or input object document. In contrast, a provenance subtype was \emph{partially represented} if only a subset of the metadata was included in the RO, or if there was ambiguity about how to represent this information in the workflow or parameter file. 
+% \subsection{Requirements}
+% \label{sec:analysis_reqs}
+% In this analysis, we consider for each of the provenance types and subtypes defined in ?? whether they adhere to the following requirements:
+
+% \begin{enumerate}[label=\textbf{R\arabic*}]
+%     \item \label{r:rep} The provenance subtype is represented in the RO.
+%     \item \label{r:struct} The representation of the subtype is in a structured format.
+% \end{enumerate}
+
+% \subsection{Methodology}
+% We perform a qualitative analysis of CWLProv 0.6.0, based on ROs generated with the CWL reference implementation \textit{cwltool}. We consider each of the 6 components defined in \ref{sec:provenance_model}. We discriminate between structured representation in RDF (provenance graph and \emph{manifest.json}), structured annotations in CWL-specific documents (\emph{packed.cwl} and \emph{primary-job.json}), and \emph{unstructured} documents such as the execution log.
+
+% We consider a component \emph{fully represented} if it is included in the document by default, or if the CWL standards provide clear guidelines for its manual annotation in a workflow or input object document. In contrast, a provenance subtype is \emph{partially represented} if only a subset of the metadata is included in the RO, or it is not clear how to annotate this in the workflow or input object document.
+
+% \subsection{Results}
+Table \ref{tab:analysis_res} summarizes the  results of the analysis.
+Of all 6 provenance elements, \textbf{execution details} (\ref{tax:execution}) are best represented in CWLProv. The provenance graph contains start and end timestamps at both workflow and step granularity %\footnote{A side note to be made here is that in \emph{cwltool}-generated ROs of executions which reused cached results, the timestamps correspond to the final execution, not the original run which computed the results. We opened an issue about this: \url{https://github.com/common-workflow-language/cwltool/issues/1689} \todorenske{Keep this in?}} 
+(\textbf{EX1}). The workflow engine is described with name and version (\textbf{EX3}), and linked to the human agent who initiated the workflow run (\textbf{EX4}). Apart from maximum memory used during a container execution, the RO contains no reference to used resources (\textbf{EX2}). 
+
+The \textbf{workflow} (\ref{tax:wf}) is also represented in CWLProv. The full workflow is contained in \emph{packed.cwl}, including any structured annotations made by the workflow author (\textbf{WF1}). In contrast, the RDF description references only the workflow and its steps. Annotations are not propagated to the provenance graph, and steps are not linked to the underlying \emph{CommandLineTool} or nested \emph{Workflow} descriptions. The workflow and step execution records mention the input parameters (\textbf{WF2}) and link them to their values, but they are not further explained with metadata in the provenance graph. 
+Software and hardware requirements (\textbf{WF3}) can be found in \emph{packed.cwl} if they were specified by the workflow author.
+
+The \textbf{computational environment} (\ref{tax:env}) is very sparsely described. Only when steps are executed in a software container, the container image (\textbf{ENV3}) is represented in RDF. However, the description is restricted to its name and tag, which is not stable and does not convey any information about its contents. If an image was built from a Dockerfile, the Dockerfile is included in \emph{packed.cwl}, but there is no guarantee that the same image (with the same versions) will be built when re-executing the workflow. Other characteristics of the computational system (\textbf{ENV1}, \textbf{ENV2}) are completely absent from the provenance record.
+
+Although the \textbf{software} (\ref{tax:software}) orchestrated by the workflow may be part of \emph{SoftwareRequirements} and therefore included in \emph{packed.cwl}, there is no guarantee that the specified versions are identical to those installed on the system which executed the workflow. If workflow authors add structured annotations about the software to the \emph{CommandLineTool} document, these are also contained in \emph{packed.cwl}. None of these annotations are represented in RDF.
+
+In contrast to software, \textbf{data entities} (\ref{tax:data}) are represented in RDF, and linked to the workflow and step parameters for which they were values (\textbf{D4}). Each file is a separate entity in the provenance graph, and when they were part of an \emph{Array} or \emph{Directory}, this association is also described. Files are annotated in the provenance graph with filename and checksum, and \emph{manifest.json} contains the creation date of files generated during workflow execution (\textbf{D2}). However, structured annotations of input data (\textbf{D1}, \textbf{D2}, \textbf{D3}) are restricted to \emph{primary-job.json}.
+
+The \textbf{scientific context} (\ref{tax:context}) can be partially represented by adding manual annotations in the workflow (via \emph{intent} and \emph{doc} fields, \textbf{SC1}) and input file (via custom annotations, \textbf{SC2}) and will be present in \emph{packed.cwl} and \emph{primary-job.json}. There are currently no standards for adding annotations specific for the execution (hence \textbf{SC3} is missing). 
+
+Summarizing, we made three main observations about the CWLProv (v0.6.0) community standard. Firstly, the RDF graph is incomplete, limiting the use of SPARQL queries for analysis of the provenance. Secondly, although some of the missing metadata can be retrieved from CWL-specific documents, their presence is heavily dependent on manual annotations. The CWL Standards (v1.2) do not give detailed guidelines for the representation of annotations for input data, which is likely to increase the barrier for workflow authors to add these annotations to their workflows, and invites inconsistency when they do. Finally, there are some elements related to the execution which are missing from RDF and impractical to add as manual annotations. As a result, details about the computational environment are almost completely absent from the provenance record, compromising computational reproducibility of the workflow. 

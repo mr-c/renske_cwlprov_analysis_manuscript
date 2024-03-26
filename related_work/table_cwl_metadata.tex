@@ -1,0 +1,21 @@
+\begin{table}[bt!]
+\caption{Metadata fields in CWL Standards v1.2. \emph{format} is only allowed for parameters of type File or File array.}\label{tab:metadata_fields}
+\begin{tabularx}{\linewidth}{L l l l l}
+\toprule
+Workflow component & label & doc & intent & format \\
+\midrule
+% Widgets & 42 & Over-supplied\textsuperscript{*} \\
+% Gadgets & 13 & Under-supplied \\
+Workflow & \textbullet & \textbullet & \textbullet & ~\\ %\hline
+WorkflowStep & \textbullet & \textbullet & ~ & ~\\ %\hline
+CommandLineTool & \textbullet & \textbullet & \textbullet & ~\\ %\hline
+ExpressionTool & ~ & ~ & \textbullet & ~\\ %\hline
+WorkflowInputParameter & \textbullet & \textbullet & ~ & \textbullet\\ %\hline
+WorkflowOutputParameter & \textbullet & \textbullet & ~ & \textbullet\\ %\hline
+WorkflowStepInput & \textbullet & ~ & ~ & ~\\ %\hline
+WorkflowStepOutput & ~ & ~ & ~ & ~\\ %\hline
+CommandInputParameter & \textbullet & \textbullet & ~ & \textbullet\\ %\hline
+CommandOutputParameter & \textbullet & \textbullet & ~ & \textbullet\\ %\hline
+\bottomrule
+\end{tabularx}
+\end{table}

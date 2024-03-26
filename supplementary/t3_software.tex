@@ -1,0 +1,21 @@
+\subsection{\ref{tax:software}: Definition of metadata for software}
+\label{sec:software_reqs}
+
+In this section, we elaborate on the representation of software in the provenance record (\ref{tax:software}). 
+
+\textbf{What:} In particular, we mean the command-line programs directly orchestrated by the workflow. However, these principles also apply to the workflow itself (\Cref{sec:wf_reqs}), the workflow engine (\Cref{sec:execution_reqs}), and computational environment (\Cref{sec:env_reqs}).
+
+\textbf{Why:} There are two main reasons why software should be described with metadata:
+
+\begin{itemize}
+    \item \textbf{Obtaining identical results in a re-execution may be highly dependent on the version of the tools used.} This is important when reproducing the workflow. 
+    \item \textbf{The original software may not be available or executable in the future.} In this case, the software should be sufficiently described for others to choose a suitable equivalent. 
+\end{itemize}
+
+\textbf{How}: We identify 3 categories of software characteristics which should be included in the provenance. Here we link them to established recommendations and best practices for software citation, according to the FORCE11 Software Citation Principles \cite{smithSoftwareCitationPrinciples2016}, which were adapted from the FORCE11 Data Citation Principles.
+
+\begin{enumerate}[label=\textbf{SW\arabic*}]
+    \item \textbf{Identification}: PID, name, version, release date and description of the software. Preferred citation. \textit{When the software is not FAIR:} URL of repository, download date and/or git commit hash as substitute for PID, version or release date. \label{req:sw_id}
+    \item \textbf{Documentation}: URL of documentation or other metadata which is important to make informed use of the tool. URL to repository with source code of the software. \label{req:sw_doc}
+    \item \textbf{Access}: URL to downloadable, executable form of the software. License. \label{req:sw_access}
+\end{enumerate}

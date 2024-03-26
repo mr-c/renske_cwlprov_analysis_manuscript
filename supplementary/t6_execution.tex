@@ -1,0 +1,15 @@
+\subsection{\ref{tax:execution}: Definition of metadata for execution details}
+\label{sec:execution_reqs}
+
+In this section, we define the final element of our provenance taxonomy: execution details (\ref{tax:execution}).
+
+\textbf{What}: Executions are everything that is related to the analysis but which is not covered by the other categories. They constitute pure retrospective provenance: a record of what actually happened during the workflow run. 
+
+\textbf{How}: We distinguish four components in this category:
+
+\begin{enumerate}[label=\textbf{EX\arabic*}]
+    \item \textbf{Timestamps}: When the workflow was executed, at step-granularity. The timestamps can be helpful when files were downloaded during the execution, especially from a database which does not have clear versions (SAbDab). In addition, the duration of the execution may be important during workflow development (test different settings) and when reproducing the workflow. \label{req:ex_time}
+    \item \textbf{Consumed resources}: The resources used during execution, at step-granularity. This is different from what was described in \Cref{sec:env_reqs}, because there we only described what was available, not what was actually used. \label{req:ex_resources}
+    \item \textbf{Workflow engine}: Software, therefore with same metadata as general software entities (\Cref{sec:software_reqs}).\label{req:ex_engine}
+    \item \textbf{Human agent}: At a minimum, a PID such as ORCID should be included, or name and email of the person who ran the workflow. These details may be important for attribution (\ref{uc:writing}), and can also be used by third parties to ask further questions about the research.  \label{req:ex_human}
+\end{enumerate}

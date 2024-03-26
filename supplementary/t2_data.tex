@@ -1,0 +1,21 @@
+\subsection{\ref{tax:data}: Definition of metadata for data}
+\label{sec:data_reqs}
+
+In this section, we describe which metadata should be attached to data entities (\ref{tax:data}) in the provenance record. 
+
+\textbf{What:} We mean not only input data, but also (intermediate) output data.
+
+\textbf{Why:} Metadata associated with data entities can have at least two purposes:
+\begin{itemize}
+    \item \textbf{To explain the meaning and context of the data.} The context of the data should be described, because others need to be able to assess the appropriateness of the data for the purpose of the computational analysis. \textit{In the case of the epitope prediction workflow, it is important to understand the composition of the training set, since this is highly influential on the performance and applicability of the model.}
+    \item \textbf{To describe data which is not contained in the RO.} To reduce RO size, or because the data cannot be shared for privacy reasons (it is proprietary or in other ways non-public), data may not be present in the RO but stored in an external repository. Characteristics of the data may still be included which provide information, to make sure that the data in the repository is the same as which was used in the original analysis. \textit{Use case \ref{uc:service} is an example where limiting the size of the RO may be desirable. Instead, the RO could contain references to datasets which are too large and are instead stored in an external repository.}
+\end{itemize}
+
+\textbf{How:} We identify 4 categories of data metadata which should be represented based on these two reasons. Here we link them to established recommendations and best practices for data citation, according to the FORCE11 Data Citation Principles \cite{datacitationsynthesisgroupJointDeclarationData2014}, which are based on the FAIR principles \cite{wilkinsonFAIRGuidingPrinciples2016}.
+
+\begin{enumerate}[label=\textbf{D\arabic*}]
+    \item \textbf{Identification}: PID, version, name and description of the dataset. Preferred citation of the data. \emph{When the data is not FAIR:} URL and download date as an alternative for PID and version. \emph{When the dataset is a subset of a larger collection (e.g. a database):} PID of database, database version and download date, and the query or filtering strategy which produced the dataset. \label{req:data_id}
+    \item \textbf{File characteristics}: Filename, format, creation and last modification timestamps, size, and checksum. \label{req:data_char}
+    \item \textbf{Access}: URL to a downloadable form of the data. License. \label{req:data_access}
+    \item \label{req:data_mapping} \textbf{Mapping}: The workflow and step parameters for which the data is an input or output.
+\end{enumerate}

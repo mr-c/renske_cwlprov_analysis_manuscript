@@ -1,0 +1,105 @@
+\section{Use case workflow}
+\label{sup:workflow}
+\todorenske{Text in supplementary is for a large part identical to the thesis, not paraphrased}
+% \todorenske{Change `epitope' to `PPI'? Extra explanation that we adapted the PPI model to epitope prediction?}
+
+In this section, we describe the design and implementation of our exemplary bioinformatics workflow. First, we formulate the requirements which our workflow design should fulfill. Subsequently, we provide a detailed description of our CWL implementation of the design.
+
+\subsection{Requirements}
+\label{sec:wf_requirements}
+
+
+The CWL implementation of our example workflow should meet two requirements, which we explain further in the subsequent sections:
+
+\begin{enumerate}[label=\textbf{WR\arabic*}]
+    \item \label{wr:method} Adhere to a specific method of epitope prediction which was conceptualized and provided to us by the workflow authors.
+    \item \label{wr:reproducibility} Address challenges which compromise the transparency and reproducibility of the workflow.
+\end{enumerate}
+
+
+\subsection{\ref{wr:method}: Adhere to a conceptual method}
+\label{sec:wf_design}
+
+In this section, we explain \ref{wr:method}, providing a conceptual overview of the method which should be implemented in the CWL workflow we used as an exemplary workflow in this work.
+
+The design of the epitope predictor, conceptualized by the workflow authors, is based on a model for predicting `general' protein-protein interaction (PPI) interfaces \cite{capelMultitaskLearningLeverage2022}. In its turn, that model was derived from OPUS-TASS \cite{xuOPUSTASSProteinBackbone2020}, a predictor for protein \emph{structure}. 
+
+It addresses the lack of training data via a multi-task learning strategy, in which the model not only learns the label of interest (epitopes), but also related characteristics, such as solvent accessibility (the fraction of amino acid surface which is exposed to the aqueous environment). This allows the model to be trained on a larger set of structures, not restricted to antibody-antigen complexes, but also including structures with general PPI interfaces and other structural information.
+
+The PPI predictor on which this method was based, was trained on OPUS-TASS reference data and did not include calculation of the input features or labels. In contrast, the OPUS-TASS source code did contain calculation of the input features, but the labels were reused from a reference dataset and not directly derived from protein structure. \textbf{However, because we wanted to maximize the transparency of our research, our workflow comprises the entire trajectory from protein structure and sequence to labels and features used for model training.} 
+
+\subsubsection{Data sources}
+These are the (main) data sources used to calculate the input features and labels:
+
+\begin{itemize}
+    \item \textbf{Protein Data Bank (PDB)} \cite{bermanProteinDataBank2000}, a database of experimentally resolved structures of proteins and complexes.
+    \item \textbf{Structural Antibody Database (SAbDab)} \cite{dunbarSAbDabStructuralAntibody2014},  a database of metadata for antibody-antigen complexes in the PDB (e.g., which part of the complex corresponds to the antibody and which to the antigen).
+    \item \textbf{BioDL} \cite{stringerPIPENNProteinInterface2022}, a dataset of protein sequences containing annotations for general PPI interactions, previously derived from structure.
+    \item \textbf{HHBlits reference database.} Used by HHBlits \cite{remmertHHblitsLightningfastIterative2012} to compute some of the input features.
+\end{itemize}
+
+\subsubsection{Structure-derived labels}
+For each residue in each protein sequence, the model predicts a number of properties. 
+
+\begin{itemize}
+    \item \textbf{Epitope}: a binary label indicating if a given residue is an epitope. Calculated from protein structure in combination with SAbDab metadata. Missing for proteins which are not included in SAbDab.
+    \item \textbf{PPI}: a binary label indicating if a given residue is part of a general PPI interface. Extracted from BioDL.
+    \item \textbf{Surface accessibility}: a label indicating how much of the amino acid is exposed to the surface. Calculated by DSSP \cite{kabschDictionaryProteinSecondary1983} based on the protein structure.
+    \item \textbf{Secondary structure}: 3 binary labels indicating the secondary structure of which a given residue is part (alpha helix, beta strand or loop). Calculated by DSSP based on the protein structure. 
+\end{itemize}
+
+\subsubsection{Sequence-derived input features}
+The model predicts epitope annotations based on three groups of sequence-derived features:
+\begin{itemize}
+    \item \textbf{PC7}: 7 features which reflect amino-acid-specific physico-chemical characteristics. Every amino acid type has fixed values for these features.
+    \item \textbf{PSP19}: 19 binary features which reflect the presence of particular amino acid `building blocks' (e.g. a benzene ring). Every amino acid type has fixed values for these features.
+    \item \textbf{HHM}: 30 features derived from a sequence profile generated from alignment with highly similar sequences. Computed with HHBlits.
+\end{itemize}
+
+\subsection{\ref{wr:reproducibility}: Address reproducibility challenges for this workflow}
+\label{sec:wf_reproducibility}
+
+In this section, we explain \ref{wr:reproducibility} by presenting a number of characteristics of our workflow which may make its implementation challenging from a transparency and reproducibility perspective.
+
+\subsubsection{Workflow design}
+
+Firstly, the method requires calculation of over 50 input features and at least 6 labels for every amino acid in each of the several thousand proteins in the training dataset, involving three data sources, at least two command-line tools and several Python scripts. This underlines the importance of describing this process as a workflow, in order to keep track of all the data flows. 
+
+Secondly, the design of the workflow is subject to extensive changes, as the workflow authors test different combinations of input features and labels in order to optimize performance as well as computational efficiency. In addition, they may need to include extra preprocessing steps to remove potential bias from the training set (e.g. due to overrepresentation of certain protein families in the PDB).
+
+\subsubsection{Software}
+
+The workflow steps each have their respective software dependencies, some of which are only compatible with particular versions of other software (e.g. \emph{tensorflow}). Recording the versions of tools and dependencies is therefore very important for reproducibility.
+
+\subsubsection{Data}
+Retrieving and handling the data used as input for this workflow has its own challenges. 
+Firstly, HHBlits can be used with different reference databases, which will influence the produced sequence profiles. These databases have versions, and are not stored in a FAIR manner. 
+
+Secondly, the dataset downloaded from PDB does not comprise the entire database, but a subset which is selected as the result of a query. Since new entries are added to PDB continually, it is not likely that running the same query at a later moment will result in the same dataset. Similarly, SAbDab also receives weekly updates \cite{dunbarSAbDabStructuralAntibody2014}. 
+
+Finally, the identifiers in the BioDL dataset correspond to particular \emph{sequences}, whereas those in SAbDab and PDB represent \emph{structures}. Therefore, we need to match the two types of identifiers with each other. However, external resources such as the UniProt mapping tool\footnote{\url{https://www.uniprot.org/id-mapping/}} \cite{theuniprotconsortiumUniProtUniversalProtein2021} may not return the same mappings in the future.
+
+\subsection{CWL implementation of the workflow}
+\label{sec:wf_implementation}
+
+In this section, we describe how we implemented the epitope prediction workflow in CWL, considering the requirements described in the previous sections. Figure \ref{fig:wf} shows an overview of the CWL implementation of the workflow.
+
+\subsubsection{Implementation of the conceptual method (\ref{wr:method})}
+
+To address the first requirement, the workflow starts by issuing a query to the PDB Search API\footnote{\url{https://search.rcsb.org/index.html\#search-api}} (\emph{run\_pdb\_query}). This produces a list of PDB IDs which is used to download the protein structures from PDB (\emph{download\_pdb\_files}), which are subsequently decompressed (\emph{decompress\_pdb\_files}). From the protein structures, DSSP calculates surface accessibility and secondary structure (\emph{generate\_dssp\_labels}), and an in-house Python script extracts epitope annotations (\emph{generate\_epitope\_labels}) using a SAbDab summary file which has been preprocessed in an earlier step (\emph{preprocess\_sabdab\_data}). Another Python script extracts PPI annotations from BioDL and performs identifier mapping (\emph{generate\_ppi\_labels}). Three separate steps calculate input features for the protein sequences with PPI annotations (\emph{generate\_hhm}, \emph{generate\_pc7}, and \emph{generate\_psp19}). The input features and labels are subsequently combined in two steps  (\emph{combine\_features}, \emph{combine\_labels}) and used to train the prediction model (\emph{train\_epitope\_prediction\_model}).
+
+\subsubsection{Consideration of workflow reproducibility  (\ref{wr:reproducibility})} 
+Firstly, we aimed to automate the workflow as much as possible. For this reason, the PDB query and download steps are included in the workflow (with the query as one of the workflow inputs). The two workflow inputs constituting the BioDL dataset (\emph{biodl\_test\_dataset} and \emph{biodl\_train\_dataset}) are included as remote files and downloaded by \emph{cwltool} during workflow execution. 
+Because SAbDab is not programmatically accessible, \emph{sabdab\_summary\_file} needs to be downloaded manually, but all further preprocessing steps are included of the workflow. 
+
+To avoid using external mapping tools between UniProt and PDB identifiers, we infer the relationships between the two types of IDs from the downloaded PDB files, which contain both types of identifiers. 
+
+To make the workflow design easy to adapt and modify with different combinations of input features and labels, we spread the computation of these features over separate steps. This is different from the original OPUS-TASS code, in which all input features are calculated by a single Python script. 
+
+To increase the portability of the computational environment, some steps are executed inside software containers. The workflow engine pulls Docker images from external repositories and converts them to Singularity \cite{kurtzerSingularityScientificContainers2017} containers, the software which is installed on the Bazis HPC cluster on which we executed the workflow. 
+% Steps for which there was no image available can be containerized in the future by building custom images from Dockerfiles and uploading them to our own repository.
+
+\subsubsection{Emulation of workflow steps} 
+Because this workflow is still in development, some steps are emulated. In this way, the steps produce output in the expected format, but do not necessarily contain biologically sensible information. 
+
+In summary, for three steps we used scripts provided by the workflow authors (\emph{preprocess\_sabdab\_data}, \emph{generate\_epitope\_labels}, and \emph{generate\_dssp\_labels}). For other steps we reused or modified code from OPUS-TASS (\emph{generate\_pc7}, \emph{generate\_psp19}, and \emph{generate\_hhm}) or other sources (\emph{run\_pdb\_query}, \emph{download\_pdb\_files}). Finally, we wrote custom Python scripts for the remaining steps, of which two were partially (\emph{combine\_labels}) or completely emulated (\emph{train\_epitope\_prediction\_model}). 

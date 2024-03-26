@@ -1,0 +1,116 @@
+\section{Annotation scheme}
+\label{sup:annotation}
+
+
+\subsection{Requirements} \label{sec:annot_req}
+
+Based on the results of the analysis described in Section \emph{\nameref{sec:cwlprov_evaluation}}, the input annotation scheme should meet the following requirements:
+
+\begin{enumerate}[label=\textbf{IR\arabic*}]
+    \item \label{ir:metadata} Represent the elements defined in \textbf{D1} and \textbf{D3}.
+    \item \label{ir:types} Describe input data of type \emph{File}, \emph{Directory} and \emph{Array}.
+    \item \label{ir:history} Represent the history of processed input data (e.g filtering).
+    \item \label{ir:query} Represent the database query which produced a dataset.
+    \item \label{ir:extend} Support extension with domain-specific vocabularies.
+    \item \label{ir:context} Represent information about a set of input parameters (\textbf{SC3})
+\end{enumerate}
+
+\subsection{Design principles}
+\label{sec:annot_principles}
+
+The design of the input data annotation scheme was based on a set of underlying principles:
+
+\begin{enumerate}[label=\textbf{IP\arabic*}]
+    \item \textbf{Reuse of existing terms and ontologies.} Our scheme uses Schema.org, since this complies with the Bioschemas \cite{grayPotatoSaladProtein2017} initiative. Schema.org terms are also adopted by related efforts such as the RO-Crate specification \cite{soiland-reyesPackagingResearchArtefacts2022}. \label{pr:bioschemas}
+    \item \textbf{Extension of the CWL standards only when absolutely necessary.} We started from the latest CWL Standards specification (v1.2), and only where these did not support adding metadata we proposed an extension. \label{pr:current_standards}
+    \item \textbf{Clear separation between input data and metadata.} This keeps the input object document relatively easy to understand. \label{pr:separate}
+    \item \textbf{Simplicity.} The annotation scheme should be easy to understand and use for CWL workflow authors. \label{pr:simplicity}
+\end{enumerate}
+
+\subsection{Annotations supported by CWL standards v1.2}
+\label{sec:annot_cwl_now}
+Here, we explain the annotations that are supported by the latest release of the CWL standards (\ref{pr:current_standards}). In the examples outlined below, we abbreviate \emph{\url{http://schema.org/}} with the prefix \emph{s:}.
+
+\subsubsection{Format}
+CWL Standards v1.2 support semantic annotations for \emph{File} and \emph{Directory} objects in the input object document. We recommend that annotations are appended on the same level as the standard fields (\emph{class}, \emph{location} and \emph{format}), where the property is the key and the annotation itself the value. Values can be single annotations, arrays or (arrays of) dictionaries. 
+
+In addition, the authors can convey information about a \emph{set} of input parameters via annotations in the root of the input object document (\ref{ir:context}). 
+
+\subsubsection{Vocabulary}
+Information about a set of input values can be expressed under the \emph{s:description} key. 
+
+For \emph{File} and \emph{Directory} inputs, we reused the Bioschemas Dataset profile v1.0\footnote{\url{https://bioschemas.org/profiles/Dataset/1.0-RELEASE}}, in this way complying with \ref{pr:bioschemas}. 
+Table \ref{tab:dataset_bioschemas} shows how the Schema.org terms relate to the required metadata specified in \textbf{D1} and  \textbf{D3}. 
+
+We recommend that authors adhere to this vocabulary when describing properties of their datasets which are domain-neutral. However, if they want to convey domain-specific information which is not covered by the terms in Table \ref{tab:dataset_bioschemas}, they may choose to extend this annotation scheme with domain-specific ontologies (such as EDAM \cite{isonEDAMOntologyBioinformatics2013}), in this way fulfilling \ref{ir:extend}. 
+
+In Section \emph{\nameref{sec:sup_example_annotations}}, we show some annotation examples. In general, we recommend that authors provide at a minimum the metadata which is not covered by the identifier of the data they use (\ref{pr:simplicity}). 
+
+\input{supplementary/table_data_annotations.tex}
+\input{supplementary/table_actions_annotations.tex}
+
+
+
+\subsection{Proposed extension of CWL standards to support richer annotations.}
+\label{sec:annot_new_cwl}
+
+The previous section explained how the latest release of the CWL standards can support metadata annotations. However, with the presented annotation scheme, authors will find it difficult to explain the history of processed input data in a structured format (\ref{ir:history}). In addition, it is non-trivial to explain that a dataset (which can be a collection of files) is the result of a database query (\ref{ir:query}).
+
+In this section, we propose an extension to the CWL standards which enables authors to annotate \emph{Arrays} (\ref{ir:types}), and represent queries and processing operations which lead to the dataset they used as input for the workflow execution.
+
+\subsubsection{Format.} 
+
+We propose that authors represent the history of their datasets as a sequence of actions in the input object document. These actions are performed on an initial dataset and produce a result. The result of an action can be the input of another.
+
+To avoid obfuscating the input object document, the metadata must be listed under a \emph{cwlprov:prov} field, separate from the input values (\ref{pr:separate}). This is analogous to the \emph{overrides} field in the current CWL standards
+\footnote{\RaggedRight\url{https://cwltool.readthedocs.io/en/latest/##overriding-workflow-requirements-at-load-time}}.% have to double the # to escape it
+
+\subsubsection{Vocabulary.}
+
+We used Schema.org terms to express search and processing actions. Table \ref{tab:action_schemaorg} lists the properties defined for \emph{s:Actions} and (more specific) \emph{s:SearchActions} and explains how they can be used in the annotation of CWL documents. In general, \emph{Actions} are performed on an \emph{object}, producing a \emph{result}. The action can be initiated by an \emph{agent}, using an \emph{instrument}. \emph{SearchActions} can be based on a \emph{query}. The moment the action was performed can be represented via \emph{endTime}.
+
+\onecolumn
+\subsection{Example input annotations}
+\label{sec:sup_example_annotations}
+
+\subsubsection{Annotations for a FAIR file.}
+\label{sec:annot_fair}
+The following is an example of a standalone dataset with its own identifier. In addition to the CWL-specific \emph{format} field (\emph{line 4}), we provided additional Schema.org terms in order to comply with \ref{ir:metadata}. In principle, providing the identifier and version with a description (\emph{lines 5-7}) is sufficient for unambiguous identification, since the identifier resolves to a landing page with additional information. However, for the purpose of our example, we added all other terms from Table \ref{tab:dataset_bioschemas} manually as well (\emph{lines 8-16}).
+
+\input{supplementary/annotations/input_annotations_fair_file}
+
+\subsubsection{Annotations for a file without persistent identifier} \label{sec:annot_nonfair}
+% \Cref{sup:annot_nonfair} 
+
+When the dataset is not FAIR, the download or modification date (\emph{line 7}) can serve as an alternative for version. The URL of the remote file is used as an alternative to a persistent identifier (\emph{line 3}).
+
+\input{supplementary/annotations/input_annotations_nonfair_file}
+
+
+\subsubsection{Adding domain-specific annotations.}
+
+The CWL standards also support adding domain-specific ontologies. Here we add extra information about the biological interpretation of the data, using terms from the EDAM ontology (with \emph{edam:} for  \emph{http://edamontology.org/}). In addition to the identifier, version and description (\emph{lines 5-7}), we explicitly define this file as a dataset and protein structure (\emph{lines 8-10}) and express the scientific domain to which it is related (\emph{line 11}). 
+
+\input{supplementary/annotations/domain_annotations}
+
+\subsubsection{Annotation of a collection of input parameters.} \label{sec:annot_actions}
+This example shows how scientific context can be represented, even for parameters which are not \emph{Files} or \emph{Directories}. Lines 1-5 denote the value of the workflow input parameters. The entire set of parameters is described via \emph{s:description} (\emph{line 7}), providing a mechanism to distinguish ROs of different workflow runs from each other.
+
+\input{supplementary/annotations/config_file}
+
+\subsubsection{Example annotation of a sequence of actions.} 
+
+In the following example, a database search was performed (\emph{lines 2-8}), followed by a filtering operation (\emph{lines 10-15}). The resulting dataset was used as an input for the workflow (\emph{lines 17-19}). Both actions are listed under \emph{cwlprov:prov} (\emph{line 1}). The result of the search action (\emph{line 7}) corresponds to the object of the filtering operation (\emph{line 12}). In this example, the query is provided in a human-readable format, but the exact query which was issued (a JSON string) could also be used.
+
+\input{supplementary/annotations/input_annotations_search_filtering}
+
+\subsubsection{Annotation of a merged dataset}
+
+In this example, a dataset is constructed from two other datasets (\emph{lines 4-6}).
+Here, the instrument is not a tool but a function (\emph{line 7})
+
+\input{supplementary/annotations/annotations_merged_dataset}
+
+\subsubsection{Annotation of exemplary bioinformatics workflow}
+Below, we show how we applied our annotation scheme to the input file for our example workflow. We represented the download action which produced the \emph{sabdab\_summary\_file} (\emph{lines 2-13}). If files were not downloaded during workflow execution, we supplied the URL to the dataset using \emph{s:distribution} (\emph{line 69}). Every file has a citation (\emph{s:citation}), consisting of the DOI of the primary publication. Finally, we supplied EDAM annotations to each \emph{File} and \emph{Directory} input (\emph{lines 29, 44, 58, 72}) and annotated the workflow run (\emph{line 78}). 
+\input{supplementary/annotations/workflow_annotations}
