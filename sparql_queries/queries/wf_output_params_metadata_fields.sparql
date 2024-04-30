@@ -1,0 +1,18 @@
+SELECT DISTINCT ?wf ?wf_param ?doc ?label ?format
+
+WHERE {
+    ?wf a wfdesc:Workflow .
+    OPTIONAL {
+        ?wf wfdesc:hasOutput ?wf_param .
+        OPTIONAL {
+            ?wf_param schema:description ?doc .
+        }
+        OPTIONAL {
+            ?wf_param schema:name ?label .
+        }
+        OPTIONAL {
+            ?wf_param schema:encodingFormat ?format .
+        }
+    }
+}
+

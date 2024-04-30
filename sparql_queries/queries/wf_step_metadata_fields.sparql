@@ -1,0 +1,9 @@
+SELECT DISTINCT ?main_wf ?main_wf_step ?doc ?label
+
+WHERE {
+    ?main_wf a wfdesc:Workflow .
+    ?main_wf wfdesc:hasSubProcess ?main_wf_step .
+    OPTIONAL {?main_wf_step schema:description ?doc}
+    OPTIONAL {?main_wf_step schema:name ?label}
+}
+

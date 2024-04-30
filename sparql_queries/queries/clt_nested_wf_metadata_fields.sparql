@@ -1,0 +1,11 @@
+SELECT DISTINCT ?main_wf ?main_wf_step ?clt ?doc ?label ?intent
+
+WHERE {
+    ?main_wf a wfdesc:Workflow .
+    ?main_wf wfdesc:hasSubProcess ?main_wf_step .
+    ?main_wf_step wfdesc:hasSubProcess ?clt .
+    OPTIONAL {?clt schema:description ?doc}
+    OPTIONAL {?clt schema:name ?label}
+    OPTIONAL {?clt schema:featureList ?intent}
+}
+

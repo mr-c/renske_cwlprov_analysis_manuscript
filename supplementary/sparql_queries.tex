@@ -64,124 +64,37 @@ response = run_query(provenance_file, query_file, namespaces)
 
 \noindent
 \textbf{Return the \emph{doc}, \emph{label} and \emph{intent} fields of the main workflow.}
-\begin{verbatim}
-SELECT ?wf ?doc ?label ?intent
 
-WHERE {
-    ?wf a wfdesc:Workflow .
-    OPTIONAL {?wf schema:description ?doc}
-    OPTIONAL {?wf schema:name ?label}
-    OPTIONAL {?wf schema:featureList ?intent}
-}
-\end{verbatim}
+\lstinputlisting[basicstyle=\footnotesize]{sparql_queries/queries/wf_metadata_fields.sparql}
+
+\noindent
+\textbf{List \emph{doc} and \emph{label} fields of all \emph{WorkflowSteps} in the main workflow.}
+
+
+\lstinputlisting[basicstyle=\footnotesize]{sparql_queries/queries/wf_step_metadata_fields.sparql}
 
 \noindent
 \textbf{Return the \emph{doc}, \emph{label} and \emph{intent} fields of every command-line tool or nested workflow that is run by each of the steps.}
 
-\begin{verbatim}
-SELECT DISTINCT ?main_wf ?doc ?label ?intent
+\lstinputlisting[basicstyle=\footnotesize]{sparql_queries/queries/clt_nested_wf_metadata_fields.sparql}
 
-WHERE {
-    ?main_wf a wfdesc:Workflow .
-    ?main_wf wfdesc:hasSubProcess ?main_wf_step .
-    ?main_wf_step wfdesc:hasSubProcess ?clt .
-    OPTIONAL {?clt schema:description ?doc}
-    OPTIONAL {?clt schema:name ?label}
-    OPTIONAL {?clt schema:featureList ?intent}
-}
-\end{verbatim}
 \noindent
 \textbf{List \emph{doc}, \emph{label}, \emph{format} fields of all input parameters of main workflow.}
 
-\begin{verbatim}
-SELECT ?wf ?doc ?label ?format
-
-WHERE {
-    ?wf a wfdesc:Workflow .
-    OPTIONAL {
-        ?wf wfdesc:hasInput ?wf_input .
-        OPTIONAL {
-            ?wf_input schema:description ?doc .
-        }
-        OPTIONAL {
-            ?wf_input schema:name ?label .
-        }
-        OPTIONAL {
-            ?wf_input schema:encodingFormat ?format .
-        }
-    }
-}
-\end{verbatim}
+\lstinputlisting[basicstyle=\footnotesize]{sparql_queries/queries/wf_input_params_metadata_fields.sparql}
 
 \noindent
 \textbf{List \emph{doc}, \emph{label}, \emph{format} fields of all output parameters of main workflow.}
 
-\begin{verbatim}
-SELECT ?wf ?doc ?label ?format
-
-WHERE {
-    ?wf a wfdesc:Workflow .
-    OPTIONAL {
-        ?wf wfdesc:hasOutput ?wf_input .
-        OPTIONAL {
-            ?wf_input schema:description ?doc .
-        }
-        OPTIONAL {
-            ?wf_input schema:name ?label .
-        }
-        OPTIONAL {
-            ?wf_input schema:encodingFormat ?format .
-        }
-    }
-}
-\end{verbatim}
+\lstinputlisting[basicstyle=\footnotesize]{sparql_queries/queries/wf_output_params_metadata_fields.sparql}
 
 \noindent
 \textbf{List \emph{doc}, \emph{label}, \emph{format} fields of all input parameters of nested \emph{Workflows}/\emph{CommandLineTools}.}
 
-\begin{verbatim}
-SELECT DISTINCT ?main_wf ?clt ?param_doc ?param_label ?param_format
-
-WHERE {
-    ?main_wf a wfdesc:Workflow .
-    ?main_wf wfdesc:hasSubProcess ?main_wf_step .
-    ?main_wf_step wfdesc:hasSubProcess ?clt .
-    OPTIONAL {
-        ?clt wfdesc:hasInput ?clt_param .
-        OPTIONAL {
-            ?clt_param schema:description ?param_doc .
-        }
-        OPTIONAL {
-            ?clt_param schema:name ?param_label .
-        }
-        OPTIONAL {
-            ?clt_param schema:encodingFormat ?param_format .
-        }
-    }
-}
-\end{verbatim}
+\lstinputlisting[basicstyle=\footnotesize]{sparql_queries/queries/clt_nested_wf_input_params_metadata_fields.sparql}
 
 \noindent
 \textbf{List \emph{doc}, \emph{label}, \emph{format} fields of all output parameters of nested \emph{Workflows}/\emph{CommandLineTools}.}
 
-\begin{verbatim}
-SELECT DISTINCT ?main_wf ?clt ?clt_output ?param_doc ?param_label ?param_format
 
-WHERE {
-    ?main_wf a wfdesc:Workflow .
-    ?main_wf wfdesc:hasSubProcess ?main_wf_step .
-    ?main_wf_step wfdesc:hasSubProcess ?clt .
-    OPTIONAL {
-        ?clt wfdesc:hasOutput ?clt_param .
-        OPTIONAL {
-            ?clt_param schema:description ?param_doc .
-        }
-        OPTIONAL {
-            ?clt_param schema:name ?param_label .
-        }
-        OPTIONAL {
-            ?clt_param schema:encodingFormat ?param_format .
-        }
-    }
-}
-\end{verbatim}
+\lstinputlisting[basicstyle=\footnotesize]{sparql_queries/queries/clt_nested_wf_output_params_metadata_fields.sparql}

@@ -1,0 +1,9 @@
+SELECT DISTINCT ?wf ?doc ?label ?intent
+
+WHERE {
+    ?wf a wfdesc:Workflow .
+    OPTIONAL {?wf schema:description ?doc}
+    OPTIONAL {?wf schema:name ?label}
+    OPTIONAL {?wf schema:featureList ?intent}
+}
+
